@@ -7,7 +7,7 @@ import requests
 
 def main():
     ##  connect problem URL
-    problem_id = 10942
+    problem_id = 15486
 
 
     url = f"https://www.acmicpc.net/problem/{problem_id}"
@@ -42,7 +42,7 @@ def main():
         image_url = extract_img_url(soup_image, url)
 
         html_content = \
-            f'''<h1 style="font-size: 30px;">''' +\
+            f'''<h1>''' +\
             f'''<img src="{image_url[9:-1]}" style="height: 1em; vertical-align: middle;" />''' +\
             f'''  {problem_id}번 - {problem_title}</h1>''' +\
             f'''\n<br><br>\n''' + html_content
