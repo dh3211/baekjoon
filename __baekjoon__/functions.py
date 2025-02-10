@@ -82,3 +82,16 @@ def extract_img_url(soup, url):
     image_url = image_url[:index +4]
 
     return image_url
+
+
+def sanitize_folder_name(folder_name):
+    """
+    폴더 이름에서 사용할 수 없는 특수문자를 제거합니다.
+    """
+    # Windows에서 허용되지 않는 특수문자
+    invalid_chars = r'[\\/:*?"<>|]'
+    
+    # 정규식을 이용해 특수문자 제거
+    sanitized_name = re.sub(invalid_chars, '', folder_name)
+    
+    return sanitized_name

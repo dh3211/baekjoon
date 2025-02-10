@@ -1,4 +1,4 @@
-from functions import img_tag2url, remove_button, cut_content, extract_img_url,remove_blank
+from functions import img_tag2url, remove_button, cut_content, extract_img_url,remove_blank, sanitize_folder_name
 from bs4 import BeautifulSoup
 import os
 import shutil
@@ -7,20 +7,21 @@ import requests
 
 def main():
     ##  connect problem URL
-    problem_id = 10866
+    problem_id = 10942
 
 
     url = f"https://www.acmicpc.net/problem/{problem_id}"
     headers = {'User-Agent':
                'Mozilla/5.0 (Windows NT 10.0; Win64; x64)\
                 AppleWebKit/537.36 (KHTML, like Gecko)\
-                Chrome/131.0.0.0 Safari/537.36'}
+                Chrome/132.0.0.0\
+                Safari/537.36'}
 
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
-        problem_title = soup.find('span', {'id': 'problem_title'}).get_text()
+        problem_title = soup.find('span', {'id': 'problem_title'}).decode_contents()
         soup = img_tag2url(soup, url)
         soup = remove_button(soup)
         html_content = str(soup)
@@ -41,9 +42,9 @@ def main():
         image_url = extract_img_url(soup_image, url)
 
         html_content = \
-            f'''<p style="font-size: 30px;">''' +\
+            f'''<h1 style="font-size: 30px;">''' +\
             f'''<img src="{image_url[9:-1]}" style="height: 1em; vertical-align: middle;" />''' +\
-            f'''  {problem_id}번 - {problem_title}</p>''' +\
+            f'''  {problem_id}번 - {problem_title}</h1>''' +\
             f'''\n<br><br>\n''' + html_content
     
     else:
@@ -53,6 +54,7 @@ def main():
 
     ##  create problem folder
     folder_name = '0'*(5- len(str(problem_id))) +f'{problem_id}' +f' - {problem_title}'
+    folder_name = sanitize_folder_name(folder_name)
     folder_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),folder_name)
 
     if not os.path.exists(folder_path):
@@ -88,16 +90,16 @@ def main():
     num = html_content.count('sample-input')
     for i in range(1, num+1):
         pre_tag = soup.find('pre', class_='sampledata', id=f'sample-input-{i}')
-        content = pre_tag.get_text()
+        content = pre_tag.decode_contents()
         with open(os.path.join(IOfolder_path, f'{problem_id}_{i}_i.txt'), 'w', encoding='utf-8') as file:
             file.write(content)
 
         pre_tag = soup.find('pre', class_='sampledata', id=f'sample-output-{i}')
-        content = pre_tag.get_text()
+        content = pre_tag.decode_contents()
         with open(os.path.join(IOfolder_path, f'{problem_id}_{i}_o.txt'), 'w', encoding='utf-8') as file:
             file.write(content)
 
-    print(f". . . Done!")
+    print(f'{folder_name}' +" ...Done!")
 
 
 if __name__ == "__main__":
