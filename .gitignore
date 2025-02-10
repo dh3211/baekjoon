@@ -1,2 +1,4 @@
 *.json
-__baekjoon__/__pycache__/
+*.pyc
+
+**/__pycache__/*
