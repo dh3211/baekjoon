@@ -40,21 +40,26 @@ def cut_content(html_content):
     return html_content
 
 
-def remove_blank(soup, html_content):
+def remove_blank(soup):
     pre_tag = []
+    html_content = str(soup)
     num = html_content.count('sample-input')
     for i in range(1, num+1):
         tg = soup.find('pre', {'id': f'sample-input-{i}'})
-        pre_tag.append(tg)
+        if tg:
+            pre_tag.append(tg)
+        tg = soup.find('pre', {'id': f'sample-output-{i}'})
+        if tg:
+            pre_tag.append(tg)
+
 
     for tg in pre_tag:
-        # 텍스트 추출 후 두 개의 줄바꿈을 하나로 변경
-        original_text = tg.get_text()
-        modified_text = re.sub(r'\n{2,}', '\n', original_text)  # 두 개 이상의 줄바꿈을 하나로
-        
-        # 변경된 텍스트로 교체
+        original_text = tg.get_text()  # 줄바꿈 포함
+        modified_text = original_text.replace("\n","")
+
         tg.string = modified_text
-    return html_content
+
+    return soup
 
 
 def extract_img_url(soup, url):
@@ -80,7 +85,7 @@ def extract_img_url(soup, url):
 
     index = image_url.find('svg')
     image_url = image_url[:index +4]
-
+    image_url = image_url[9:-1]
     return image_url
 
 
