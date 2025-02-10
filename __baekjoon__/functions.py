@@ -54,8 +54,10 @@ def remove_blank(soup):
 
 
     for tg in pre_tag:
-        original_text = tg.get_text()  # 줄바꿈 포함
-        modified_text = original_text.replace("\n","")
+        original_text = tg.get_text()
+        original_text = str(original_text)
+        modified_text = original_text.replace("\r\n","\n")
+        print(original_text)
 
         tg.string = modified_text
 
