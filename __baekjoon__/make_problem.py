@@ -4,12 +4,13 @@ import os
 import shutil
 import requests
 import json
+import sys
 
+def main(problem_id=0):
+    if problem_id==0:
+        problem_id = 15486
 
-def main():
     ##  connect problem URL
-    problem_id = 15486
-
     url = f"https://www.acmicpc.net/problem/{problem_id}"
     headers = {'User-Agent':
                'Mozilla/5.0 (Windows NT 10.0; Win64; x64)\
@@ -121,4 +122,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    problem_id = sys.argv[1]
+    main(problem_id)
