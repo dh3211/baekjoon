@@ -57,7 +57,6 @@ def remove_blank(soup):
         original_text = tg.get_text()
         original_text = str(original_text)
         modified_text = original_text.replace("\r\n","\n")
-        print(original_text)
 
         tg.string = modified_text
 
