@@ -24,7 +24,7 @@ for _ in range(m):
     map_part = ['.'] + list(sys.stdin.readline().strip()) + ['.']
     map_.append(map_part)
 map_.append(['.'] * (n+2))
-print(map_)
+
 ans = 0
 for i in range(1, n+1):
     for j in range(1, m+1):
