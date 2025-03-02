@@ -23,28 +23,32 @@ MAX = max(N,K)
 dp = [0] *(MAX*2+1)
 end = 0
 
-q = Queue()
-q.put(N)
-while not q.empty():
-    idx = q.get()
+if N==K:
+    print(0)
 
-    for new_idx in [idx+1, idx-1, idx *2]:
-        if new_idx > (MAX*2+1):
-            continue
-        if new_idx < 0:
-            continue
-        if dp[new_idx] != 0:
-            continue
+else:
+    q = Queue()
+    q.put(N)
+    while not q.empty():
+        idx = q.get()
 
-        q.put(new_idx)
-        dp[new_idx] = dp[idx] +1
+        for new_idx in [idx+1, idx-1, idx *2]:
+            if new_idx > (MAX*2+1):
+                continue
+            if new_idx < 0:
+                continue
+            if dp[new_idx] != 0:
+                continue
 
-        if K == new_idx:
-            end = 1
+            q.put(new_idx)
+            dp[new_idx] = dp[idx] +1
 
-    if end:
-        break
+            if K == new_idx:
+                end = 1
+
+        if end:
+            break
     
-print(dp)
-print(dp[K])
+
+    print(dp[K])
         
