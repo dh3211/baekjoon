@@ -19,38 +19,53 @@ import sys
 
 n, m = list(map(int, sys.stdin.readline().split(' ')))
 
-q = Queue()
+rip_tomatos_lists = []
+rip_tomatos = []
+tomato_count = 0
+rip_tomato_count = 0
 
 MAP = [[-1 for _ in range(n+2)] for _ in range(m+2)]
 for j in range(m):
     MAP_row = list(map(int, sys.stdin.readline().split(' ')))
     for i in range(n):
         MAP[j+1][i+1] = MAP_row[i]
+
+        if MAP_row[i] != -1:
+            tomato_count+=1
+
         if MAP_row[i]==1:
-            q.put([i+1,j+1])
+            rip_tomatos.append([i+1,j+1])
+            rip_tomato_count+=1
+
+rip_tomatos_lists.append(rip_tomatos)
 
 
-while not q.empty():
-    x,y = q.get()
-    val = MAP[y][x]
+step =-1
+ing = True
+while ing:
+    step+=1
+    ing = False
 
-    for dx,dy in [[1,0],[-1,0],[0,1],[0,-1]]:
-        X = x+dx
-        Y = y+dy
+    rip_tomatos = []
+    for x,y in rip_tomatos_lists[-1]:
+        val = MAP[y][x]
 
-        if MAP[Y][X] != 0:
-            continue
-        
-        MAP[Y][X] = val+1
-        q.put([X,Y])
+        for dx,dy in [[1,0],[-1,0],[0,1],[0,-1]]:
+            X = x+dx
+            Y = y+dy
 
-raw_tomato = False
-for j in range(1,m+2):
-    for i in range(1,n+2):
-        if MAP[j][i] == 0:
-            raw_tomato = True
+            if MAP[Y][X] != 0:
+                continue
+            
+            ing = True
+            MAP[Y][X] = 1
+            rip_tomato_count +=1
+            rip_tomatos.append([X,Y])
 
-if raw_tomato:
-    print(-1)
+    rip_tomatos_lists.append(rip_tomatos)
+
+
+if tomato_count == rip_tomato_count:
+    print(step)
 else:
-    print(val-1)
+    print(-1)
